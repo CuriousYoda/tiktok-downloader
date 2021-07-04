@@ -5,21 +5,21 @@ All credits to developers of those two modules.
 
 
 ## Features
-- Takes a Tiktok user name and downloads X TikToks starting from most recent ones
+- Takes a Tiktok user name or a hashtag and downloads X TikToks starting from most recent ones
   - You can define how many TikToks to be downloaded
 
 ## How to use
 - You need to have chrome browser installed.
-- Download the project as a zip file (it's around 11MB), unzip and go into the folder.
 - Set up the folder path to download tiktoks in the properties file
-- Run the tik-tok-scraper.exe either by double clicking or by opening CMD prompt and typing "insta-scraper.exe"
+- If you get a Captcha error, please set up a custom verifyfp value in the property file. Here is [how to create a verifyfp](https://www.youtube.com/watch?v=MgjorCvPzxg)
+- Run "Python tik-tok-scraper.py".
 - TikToks will be downloaded to the folder you specified. User photos will be saved to a folder name with User Full Name and Hashtag photos to a folder named with that hashtag
 
 ## Development & Packaging
 - PyInstaller is used to package the exe
 
 ## Next Steps
-- Support for hashtags
+- Right now, exe is not working. It seems to be an [issue](https://github.com/davidteather/TikTok-Api/issues/591) with PlayWright and Pyinstaller. Need to investigate further. 
 
 Copyright (c) [2021] [[@CuriousYoda](https://twitter.com/CuriousYoda)]
 
