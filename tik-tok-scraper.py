@@ -1,3 +1,8 @@
+__author__ = "@CuriousYoda"
+__copyright__ = "Copyright (C) 2021 @CuriousYoda"
+__license__ = "MIT"
+__version__ = "1.0"
+
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
@@ -9,14 +14,10 @@ import configparser
 import logging
 from selenium.webdriver.common.keys import Keys
 
-__author__ = "@CuriousYoda"
-__copyright__ = "Copyright (C) 2021 @CuriousYoda"
-__license__ = "MIT"
-__version__ = "1.0"
-
 level = logging.ERROR
 logger = logging.getLogger()
 logger.setLevel(level)
+os.environ["WDM_LOG_LEVEL"] = str(logging.WARNING)
 
 
 def readProperty(propertyValue):
@@ -39,14 +40,17 @@ def initiateDriver():
     chrome_options = Options()
     chrome_options.headless = True
     chrome_options.add_argument('log-level=3')
+    chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
     browser = webdriver.Chrome(
         ChromeDriverManager().install(),
         options=chrome_options)
     return browser
 
-
-api = TikTokApi()
+print("Setting up the selenium headless Chrome Driver")
 browser = initiateDriver()
+print("Setting up a connection to unofficial TikTokAPI")
+api = TikTokApi()
+print("Setting up the session for requests")
 session = requests.Session()
 
 
@@ -58,12 +62,11 @@ def getFolderPath(username):
 
 
 def downloadTikTok(filePath, url):
-    print("Downloading...: " + url)
     response = requests.get(url, headers={
-                                'User-Agent': 'Mozilla/5.0 (Macintosh;'
-                                'Intel Mac OS X 10_9_3) AppleWebKit/537.36'
-                                '(KHTML, like Gecko) Chrome/35.0.1916.47'
-                                'Safari/537.36'})
+        'User-Agent': 'Mozilla/5.0 (Macintosh;'
+        'Intel Mac OS X 10_9_3) AppleWebKit/537.36'
+        '(KHTML, like Gecko) Chrome/35.0.1916.47'
+        'Safari/537.36'})
 
     with open(filePath, 'wb') as f:
         f.write(response.content)
@@ -81,6 +84,10 @@ for post in userPosts:
     videoId = str(post['id'])
     videoPageUrl = "https://www.tiktok.com/@" + username + "/video/" + videoId
     filePath = getFolderPath(username) + "/" + videoId + ".mp4"
+
+    if os.path.isfile(filePath):
+        print("TikTok already downloded. Skipped: " + videoId)
+        continue
 
     browser.get(getTwitterDownloadWebsite())
     urlField = browser.find_element_by_id("url")
