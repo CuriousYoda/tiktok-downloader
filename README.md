@@ -1,4 +1,4 @@
-# TikTok-downloader
+# TikTok-Downloader
 Simple Python+Selenium script to download TikTok videos for a given user without water marks. 
 This uses [TikTokAPI](https://davidteather.github.io/TikTok-Api/docs/) to fetch relevant data and https://snaptik.app/ to generate videos without watermarks. 
 All credits to developers of those two modules. 
