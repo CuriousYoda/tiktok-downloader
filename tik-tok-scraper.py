@@ -40,22 +40,30 @@ def initiateDriver():
     chrome_options = Options()
     chrome_options.headless = True
     chrome_options.add_argument('log-level=3')
-    chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    chrome_options.add_experimental_option(
+        'excludeSwitches', ['enable-logging'])
     browser = webdriver.Chrome(
         ChromeDriverManager().install(),
         options=chrome_options)
     return browser
 
+
+def getVerifyFp():
+    website = readProperty("VERIFY_FP")
+    return website
+
+
 print("Setting up the selenium headless Chrome Driver")
 browser = initiateDriver()
 print("Setting up a connection to unofficial TikTokAPI")
-api = TikTokApi()
+v = getVerifyFp()
+api = api = TikTokApi.get_instance(custom_verifyFp=v, use_test_endpoints=True)
 print("Setting up the session for requests")
 session = requests.Session()
 
 
-def getFolderPath(username):
-    folderPath = readProperty("BASE_FOLDER") + "/" + username
+def getFolderPath(folderName):
+    folderPath = readProperty("BASE_FOLDER") + "/" + folderName
     if not os.path.isdir(folderPath):
         os.makedirs(folderPath)
     return folderPath
@@ -73,21 +81,15 @@ def downloadTikTok(filePath, url):
         f.close()
 
 
-username = input("Enter the tik tok user name: ")
-videosToDownload = int(input("Enter the number of tiktoks to download: "))
-userPosts = api.byUsername(username, count=videosToDownload)
+def downloadPost(username, videoId, folderName):
+    print("\nDownloading TikTok: " + videoId)
 
-
-for post in userPosts:
-    print("\nDownloading TikTok: " + str(post['id']))
-
-    videoId = str(post['id'])
     videoPageUrl = "https://www.tiktok.com/@" + username + "/video/" + videoId
-    filePath = getFolderPath(username) + "/" + videoId + ".mp4"
+    filePath = getFolderPath(folderName) + "/" + videoId + ".mp4"
 
     if os.path.isfile(filePath):
         print("TikTok already downloded. Skipped: " + videoId)
-        continue
+        return
 
     browser.get(getTwitterDownloadWebsite())
     urlField = browser.find_element_by_id("url")
@@ -101,5 +103,36 @@ for post in userPosts:
     downloadTikTok(filePath, downloadLink)
 
     print("Downloaded TikTok: " + videoId)
+
+
+shouldContinue = True
+
+while shouldContinue:
+    choice = input(
+        '\nDo you wish to download TikToks for a'
+        '\n   1: User or\n   2: HashTag\n') or "1"
+
+    if choice == "1":
+        username = input("Enter the tik tok user name: ") or "tiktok"
+        videosToDownload = int(
+            input("Enter the number of tiktoks to download: ") or 10)
+        userPosts = api.byUsername(username, count=videosToDownload)
+        for post in userPosts:
+            downloadPost(username, str(post['id']), username)
+
+    elif choice == "2":
+        hashTag = input("Enter the tik tok hashtag: #") or "tiktok"
+        videosToDownload = int(
+            input("Enter the number of tiktoks to download: ") or 10)
+        hashTagPosts = api.byHashtag(hashTag, count=videosToDownload)
+        for post in hashTagPosts:
+            downloadPost(post['author']['uniqueId'], str(post['id']), "#" + hashTag)
+
+    else:
+        continue
+
+    choice = input('\nType exit and press Enter to quit: ')
+    if choice == "exit":
+        shouldContinue = False
 
 browser.close()
