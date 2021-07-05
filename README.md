@@ -11,7 +11,6 @@ All credits to developers of those two modules.
 ## How to use
 - You need to have chrome browser installed.
 - Set up the folder path to download tiktoks in the properties file
-- If you get a Captcha error, please set up a custom verifyfp value in the property file. Here is [how to create a verifyfp](https://www.youtube.com/watch?v=MgjorCvPzxg)
 - Run "Python tik-tok-scraper.py".
 - TikToks will be downloaded to the folder you specified. User photos will be saved to a folder name with User Full Name and Hashtag photos to a folder named with that hashtag
 
@@ -19,6 +18,7 @@ All credits to developers of those two modules.
 - PyInstaller is used to package the exe
 
 ## Known Issues
+- If you get a Captcha error, please set up a custom verifyfp value in the property file. Here is [how to create a verifyfp](https://www.youtube.com/watch?v=MgjorCvPzxg)
 - Right now, exe is not working. It seems to be an [issue](https://github.com/davidteather/TikTok-Api/issues/591) with PlayWright and Pyinstaller. Need to investigate further. 
 
 Copyright (c) [2021] [[@CuriousYoda](https://twitter.com/CuriousYoda)]
