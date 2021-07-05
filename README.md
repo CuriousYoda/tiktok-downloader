@@ -18,7 +18,7 @@ All credits to developers of those two modules.
 ## Development & Packaging
 - PyInstaller is used to package the exe
 
-## Next Steps
+## Known Issues
 - Right now, exe is not working. It seems to be an [issue](https://github.com/davidteather/TikTok-Api/issues/591) with PlayWright and Pyinstaller. Need to investigate further. 
 
 Copyright (c) [2021] [[@CuriousYoda](https://twitter.com/CuriousYoda)]
