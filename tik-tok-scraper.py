@@ -20,14 +20,15 @@ logger.setLevel(level)
 os.environ["WDM_LOG_LEVEL"] = str(logging.WARNING)
 
 
-def readProperty(propertyValue):
+def readProperty(propertyValue, optional=False):
     config = configparser.RawConfigParser()
     config_file = open('tik-tok-scraper.properties', encoding="utf-8")
     config.read_file(config_file)
     value = config.get("UserInput", propertyValue)
     if not value:
         print("Missing property value: " + propertyValue)
-        sys.exit()
+        if not optional:
+            sys.exit()
     return value
 
 
@@ -49,15 +50,20 @@ def initiateDriver():
 
 
 def getVerifyFp():
-    website = readProperty("VERIFY_FP")
-    return website
+    verifyFp = readProperty("VERIFY_FP", True)
+    return verifyFp
 
 
 print("Setting up the selenium headless Chrome Driver")
 browser = initiateDriver()
+
 print("Setting up a connection to unofficial TikTokAPI")
 v = getVerifyFp()
-api = api = TikTokApi.get_instance(custom_verifyFp=v, use_test_endpoints=True)
+if v:
+    api = TikTokApi.get_instance(custom_verifyFp=v, use_test_endpoints=True)
+else:
+    api = TikTokApi.get_instance(use_test_endpoints=True)
+
 print("Setting up the session for requests")
 session = requests.Session()
 
@@ -126,7 +132,9 @@ while shouldContinue:
             input("Enter the number of tiktoks to download: ") or 10)
         hashTagPosts = api.byHashtag(hashTag, count=videosToDownload)
         for post in hashTagPosts:
-            downloadPost(post['author']['uniqueId'], str(post['id']), "#" + hashTag)
+            downloadPost(
+                post['author']['uniqueId'], str(
+                    post['id']), "#" + hashTag)
 
     else:
         continue
