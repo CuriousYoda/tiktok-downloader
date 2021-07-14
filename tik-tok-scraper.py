@@ -13,6 +13,7 @@ import os
 import configparser
 import logging
 from selenium.webdriver.common.keys import Keys
+from clint.textui import progress
 
 level = logging.ERROR
 logger = logging.getLogger()
@@ -75,16 +76,29 @@ def getFolderPath(folderName):
     return folderPath
 
 
-def downloadTikTok(filePath, url):
-    response = requests.get(url, headers={
+def requestUrl(url):
+    response = requests.get(url, stream=True, headers={
         'User-Agent': 'Mozilla/5.0 (Macintosh;'
         'Intel Mac OS X 10_9_3) AppleWebKit/537.36'
         '(KHTML, like Gecko) Chrome/35.0.1916.47'
         'Safari/537.36'})
 
-    with open(filePath, 'wb') as f:
-        f.write(response.content)
-        f.close()
+    return response
+
+
+def requestAndSaveUrlInChunk(url, postFileName):
+    response = requestUrl(url)
+    with open(postFileName, 'wb') as f:
+        total_length = int(response.headers.get('content-length'))
+        for chunk in progress.bar(response.iter_content(
+                chunk_size=1024), expected_size=(total_length / 1024) + 1):
+            if chunk:
+                f.write(chunk)
+                f.flush()
+
+
+def getWaitingTimeForDownloadLink():
+    return readProperty("WAIT_TIME_IN_SECONDS")
 
 
 def downloadPost(username, videoId, folderName):
@@ -92,21 +106,31 @@ def downloadPost(username, videoId, folderName):
 
     videoPageUrl = "https://www.tiktok.com/@" + username + "/video/" + videoId
     filePath = getFolderPath(folderName) + "/" + videoId + ".mp4"
+    waitTime = getWaitingTimeForDownloadLink()
 
     if os.path.isfile(filePath):
-        print("TikTok already downloded. Skipped: " + videoId)
+        print("Skipped. File Exists: " + videoId)
         return
 
     browser.get(getTwitterDownloadWebsite())
     urlField = browser.find_element_by_id("url")
     urlField.send_keys(videoPageUrl)
     urlField.send_keys(Keys.ENTER)
-    browser.implicitly_wait(5)
-    downloadBlock = browser.find_element_by_id("download-block")
+    browser.implicitly_wait(waitTime)
+    downloadBlocks = browser.find_elements_by_id("download-block")
+
+    if len(downloadBlocks) < 0:
+        print("Download failed: " + videoId)
+        failedWebPagePath = getFolderPath(folderName) + "/" + videoId + ".html"
+        with open(failedWebPagePath, 'w') as f:
+            f.write(browser.page_source)
+        return
+
+    downloadBlock = downloadBlocks[0]
     downloadLinkElement = downloadBlock.find_element_by_tag_name("a")
     downloadLink = downloadLinkElement.get_attribute("href")
 
-    downloadTikTok(filePath, downloadLink)
+    requestAndSaveUrlInChunk(downloadLink, filePath)
 
     print("Downloaded TikTok: " + videoId)
 
