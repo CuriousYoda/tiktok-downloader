@@ -7,12 +7,33 @@ All credits to developers of those two modules.
 ## Features
 - Takes a Tiktok user name or a hashtag and downloads X TikToks starting from most recent ones
   - You can define how many TikToks to be downloaded
+  
 
-## How to use
+## Git Installtion
+```
+# clone the repo
+$ git clone https://github.com/CuriousYoda/tiktok-downloader.git
+
+# change the working directory to Facebook-Video-Downloader
+$ cd tiktok-downloader
+
+# install the requirements
+$ pip3 install -r requirements.txt
+```
+
+## Required Properties/Dependencies
 - You need to have chrome browser installed.
 - Set up the folder path to download tiktoks in the properties file
-- Run "Python tik-tok-scraper.py".
-- TikToks will be downloaded to the folder you specified. User photos will be saved to a folder name with User Full Name and Hashtag photos to a folder named with that hashtag
+
+## Usage
+```
+# With exe (Only for Windows systems) //DOES NOT WORK FOR THE MOMENT
+$ Double click on exe or Open a CMD prompt and run "insta-scraper.exe"
+
+# Through script
+$ python tik-tok-scraper.py
+
+```
 
 ## Development & Packaging
 - PyInstaller is used to package the exe
