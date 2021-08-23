@@ -56,6 +56,14 @@ def getUseTestEndPoints():
         return True
     else:
         return False
+   
+
+def getUseSelenium():
+    use_selenium = readProperty("USE_SELENIUM", True)
+    if use_selenium == "true":
+        return True
+    else:
+        return False
 
 
 def getVerifyFp():
@@ -68,15 +76,8 @@ browser = initiateDriver()
 print("Setting up a connection to unofficial TikTokAPI")
 v = getVerifyFp()
 use_test_endpoints = bool(getUseTestEndPoints())
-if v:
-    api = TikTokApi.get_instance(custom_verifyFp=v, use_test_endpoints=True)
-else:
-    if use_test_endpoints:
-        print("USING TEST END POINTS")
-        api = TikTokApi.get_instance(use_test_endpoints=True)
-    else:
-        print("NOT USING TEST END POINTS")
-        api = TikTokApi()   
+use_selenium = bool(getUseTestEndPoints())
+api = TikTokApi.get_instance(custom_verifyFp=v, use_test_endpoints=use_test_endpoints, use_selenium=use_selenium)
 
 print("Setting up the session for requests")
 session = requests.Session()
