@@ -27,16 +27,13 @@ $ pip3 install -r requirements.txt
 
 ## Usage
 ```
-# With exe (Only for Windows systems) //DOES NOT WORK FOR THE MOMENT
-$ Double click on exe or Open a CMD prompt and run "insta-scraper.exe"
-
 # Through script
 $ python tik-tok-scraper.py
 
 ```
 
 ## Development & Packaging
-- PyInstaller is used to package the exe
+- 
 
 ## Known Issues
 - If you get a Captcha error, please set up a custom verifyfp value in the property file. Here is [how to create a verifyfp](https://www.youtube.com/watch?v=MgjorCvPzxg)
