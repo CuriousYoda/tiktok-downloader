@@ -41,7 +41,7 @@ $ python tik-tok-scraper.py
 
 ## Known Issues
 - If you get a Captcha error, please set up a custom verifyfp value in the property file. Here is [how to create a verifyfp](https://www.youtube.com/watch?v=MgjorCvPzxg)
-- Right now, exe is not working. It seems to be an [issue](https://github.com/davidteather/TikTok-Api/issues/591) with PlayWright and Pyinstaller. Need to investigate further. 
+
 
 Copyright (c) [2021] [[@CuriousYoda](https://twitter.com/CuriousYoda)]
 
