@@ -27,7 +27,6 @@ $ pip3 install -r requirements.txt
 
 ## Usage
 ```
-# Through script
 $ python tik-tok-scraper.py
 
 ```
