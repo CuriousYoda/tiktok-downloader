@@ -31,6 +31,10 @@ $ python tik-tok-scraper.py
 
 ```
 
+## Screenshots
+![image](https://user-images.githubusercontent.com/86459866/130412994-3fb4c48a-4820-439a-b517-74771f90af61.png)
+
+
 ## Development & Packaging
 - 
 
