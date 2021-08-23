@@ -50,20 +50,33 @@ def initiateDriver():
     return browser
 
 
+def getUseTestEndPoints():
+    use_test_endpoints = readProperty("USE_TEST_END_POINTS", True)
+    if use_test_endpoints == "true":
+        return True
+    else:
+        return False
+
+
 def getVerifyFp():
     verifyFp = readProperty("VERIFY_FP", True)
     return verifyFp
-
 
 print("Setting up the selenium headless Chrome Driver")
 browser = initiateDriver()
 
 print("Setting up a connection to unofficial TikTokAPI")
 v = getVerifyFp()
+use_test_endpoints = bool(getUseTestEndPoints())
 if v:
     api = TikTokApi.get_instance(custom_verifyFp=v, use_test_endpoints=True)
 else:
-    api = TikTokApi.get_instance(use_test_endpoints=True)
+    if use_test_endpoints:
+        print("USING TEST END POINTS")
+        api = TikTokApi.get_instance(use_test_endpoints=True)
+    else:
+        print("NOT USING TEST END POINTS")
+        api = TikTokApi()   
 
 print("Setting up the session for requests")
 session = requests.Session()
