@@ -23,6 +23,7 @@ $ pip3 install -r requirements.txt
 
 ## Required Properties/Dependencies
 - You need to have chrome browser installed.
+- You need to download the correct [chromedriver](https://chromedriver.chromium.org/downloads) version and add that into the tiktok-downloader folder. 
 - Set up the folder path to download tiktoks in the properties file
 
 ## Usage
