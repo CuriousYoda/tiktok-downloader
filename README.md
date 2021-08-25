@@ -14,7 +14,7 @@ All credits to developers of those two modules.
 # clone the repo
 $ git clone https://github.com/CuriousYoda/tiktok-downloader.git
 
-# change the working directory to Facebook-Video-Downloader
+# change the working directory to Tiktok-Video-Downloader
 $ cd tiktok-downloader
 
 # install the requirements
